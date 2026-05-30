@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CreditBridge — Paspor Kreditmu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A0F1E;
+  --bg2: #111827;
+  --bg3: #1a2235;
+  --card: #141c2e;
+  --card2: #1e2940;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #F0F4FF;
+  --text2: #8B96B0;
+  --text3: #5a6580;
+  --blue: #3B82F6;
+  --blue2: #60A5FA;
+  --blue-dim: rgba(59,130,246,0.12);
+  --green: #10B981;
+  --green-dim: rgba(16,185,129,0.12);
+  --amber: #F59E0B;
+  --amber-dim: rgba(245,158,11,0.12);
+  --red: #EF4444;
+  --red-dim: rgba(239,68,68,0.1);
+  --purple: #8B5CF6;
+  --purple-dim: rgba(139,92,246,0.12);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* BACKGROUND EFFECT */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 10%, rgba(59,130,246,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 80% 80%, rgba(139,92,246,0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* NAV */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,15,30,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-mark {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.logo-text {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+.nav-tabs {
+  display: flex;
+  gap: 2px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
+}
+.nav-tab {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  cursor: pointer;
+  border-radius: 7px;
+  transition: all .2s;
+  border: none;
+  background: none;
+}
+.nav-tab.active {
+  background: var(--card2);
+  color: var(--text);
+  border: 1px solid var(--border2);
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-avatar {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: white;
+}
+
+/* MAIN LAYOUT */
+.app { position: relative; z-index: 1; }
+.page { display: none; animation: fadeIn .25s ease; }
+.page.active { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* BORROWER PAGE */
+.borrower-layout {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* Score Hero */
+.score-hero {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 24px;
+  padding: 28px 24px 24px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.score-hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.score-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.score-hero-label {
+  font-size: 12px;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.score-refresh {
+  font-size: 11px;
+  color: var(--text3);
+}
+.score-main {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.score-number {
+  font-family: 'Fraunces', serif;
+  font-size: 72px;
+  font-weight: 300;
+  line-height: 1;
+  background: linear-gradient(135deg, #93C5FD, #3B82F6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.score-side {
+  padding-bottom: 8px;
+}
+.score-category {
+  display: inline-block;
+  background: var(--green-dim);
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(16,185,129,0.2);
+  margin-bottom: 4px;
+}
+.score-limit {
+  font-size: 13px;
+  color: var(--text2);
+}
+.score-limit strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Score bar */
+.score-bar-container {
+  margin-bottom: 8px;
+}
+.score-bar-track {
+  height: 6px;
+  background: var(--bg3);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.score-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #3B82F6, #60A5FA);
+  width: 0%;
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+}
+.score-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text3);
+  font-family: 'DM Mono', monospace;
+}
+
+/* Next milestone */
+.milestone-strip {
+  background: var(--blue-dim);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.milestone-text { color: #93C5FD; }
+.milestone-points {
+  background: var(--blue);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 999px;
+}
+
+/* Data sources */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.section-action {
+  font-size: 12px;
+  color: var(--blue2);
+  cursor: pointer;
+  background: none; border: none;
+}
+
+.sources-list {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.source-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background .15s;
+  cursor: pointer;
+}
+.source-item:last-child { border-bottom: none; }
+.source-item:hover { background: var(--card2); }
+.source-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.source-info { flex: 1; }
+.source-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 1px; }
+.source-detail { font-size: 11px; color: var(--text3); }
+.source-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+.badge-connected { background: var(--green-dim); color: var(--green); border: 1px solid rgba(16,185,129,0.2); }
+.badge-pending { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+.badge-points { background: var(--blue-dim); color: var(--blue2); border: 1px solid rgba(59,130,246,0.2); }
+
+/* Pillars */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.pillar-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+.pillar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.pillar-name { font-size: 11px; color: var(--text2); }
+.pillar-score { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; }
+.pillar-bar-track {
+  height: 4px;
+  background: var(--bg3);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.pillar-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  width: 0%;
+  transition: width 1.4s cubic-bezier(.4,0,.2,1);
+}
+.pillar-hint { font-size: 10px; color: var(--text3); }
+
+/* CTA */
+.cta-primary {
+  width: 100%;
+  background: linear-gradient(135deg, #2563EB, #3B82F6);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  padding: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all .2s;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 20px rgba(59,130,246,0.25);
+}
+.cta-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 28px rgba(59,130,246,0.35);
+}
+.cta-secondary {
+  width: 100%;
+  background: var(--card2);
+  color: var(--text2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 13px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all .2s;
+}
+.cta-secondary:hover { color: var(--text); border-color: var(--border2); background: var(--card2); }
+
+/* ONBOARDING PAGE */
+.onboard-layout {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+.step-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 28px;
+}
+.step-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600;
+  flex-shrink: 0;
+}
+.step-done { background: var(--green); color: white; }
+.step-active { background: var(--blue); color: white; }
+.step-todo { background: var(--bg3); color: var(--text3); border: 1px solid var(--border); }
+.step-line { flex: 1; height: 1px; }
+.step-line-done { background: var(--green); }
+.step-line-todo { background: var(--border); }
+
+.onboard-title {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.25;
+}
+.onboard-sub {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.connect-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.connect-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  position: relative;
+}
+.connect-item:hover { border-color: var(--border2); background: var(--card2); }
+.connect-item.selected {
+  border-color: var(--blue);
+  background: var(--blue-dim);
+}
+.connect-item.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 8px; right: 10px;
+  font-size: 11px;
+  color: var(--blue2);
+  font-weight: 700;
+}
+.connect-emoji { font-size: 26px; margin-bottom: 8px; }
+.connect-name { font-size: 12px; font-weight: 500; color: var(--text2); }
+.connect-item.selected .connect-name { color: var(--blue2); }
+
+.privacy-box {
+  background: var(--green-dim);
+  border: 1px solid rgba(16,185,129,0.2);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+.privacy-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.privacy-text { font-size: 12px; color: #6EE7B7; line-height: 1.5; }
+.privacy-text strong { font-weight: 600; }
+
+/* BANK DASHBOARD PAGE */
+.bank-layout {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+.bank-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.bank-title {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.bank-sub { font-size: 13px; color: var(--text2); }
+.bank-actions { display: flex; gap: 8px; align-items: center; }
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all .15s;
+}
+.btn-outline {
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border2);
+}
+.btn-outline:hover { color: var(--text); border-color: var(--text3); }
+.btn-filled {
+  background: var(--blue);
+  color: white;
+  border: 1px solid transparent;
+}
+.btn-filled:hover { background: #2563EB; }
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.kpi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+.kpi-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+.kpi-value { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 400; color: var(--text); margin-bottom: 4px; }
+.kpi-delta { font-size: 11px; font-family: 'DM Mono', monospace; }
+.delta-up { color: var(--green); }
+.delta-flat { color: var(--text3); }
+
+.bank-grid { display: grid; grid-template-columns: 1fr 340px; gap: 16px; }
+
+.table-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.table-head {
+  display: grid;
+  grid-template-columns: 2fr 80px 80px 100px 90px;
+  padding: 12px 18px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+.th {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 80px 80px 100px 90px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  transition: background .15s;
+  cursor: pointer;
+}
+.table-row:last-child { border-bottom: none; }
+.table-row:hover { background: var(--card2); }
+.td-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.td-job { font-size: 11px; color: var(--text3); margin-top: 1px; }
+.td-score {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+}
+.td-sources { font-size: 12px; color: var(--text2); }
+.pill {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+.pill-approve { background: var(--green-dim); color: var(--green); border: 1px solid rgba(16,185,129,0.2); }
+.pill-review { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+.pill-reject { background: var(--red-dim); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+.pill-processing { background: var(--blue-dim); color: var(--blue2); border: 1px solid rgba(59,130,246,0.2); }
+
+.right-col { display: flex; flex-direction: column; gap: 14px; }
+
+.dist-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.dist-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.dist-row { margin-bottom: 12px; }
+.dist-meta { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.dist-label { font-size: 12px; color: var(--text2); }
+.dist-val { font-size: 12px; font-family: 'DM Mono', monospace; color: var(--text); }
+.dist-track {
+  height: 6px;
+  background: var(--bg3);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.dist-fill {
+  height: 100%;
+  border-radius: 999px;
+  width: 0%;
+  transition: width 1.5s cubic-bezier(.4,0,.2,1);
+}
+
+/* API PAGE */
+.api-layout {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+}
+.api-header {
+  margin-bottom: 24px;
+}
+.api-title {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.api-sub { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+.endpoint-bar {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.method-badge {
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(16,185,129,0.2);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-family: 'DM Mono', monospace;
+  flex-shrink: 0;
+}
+.endpoint-url {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--text2);
+  flex: 1;
+}
+
+.code-card {
+  background: #0d1117;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.code-toolbar {
+  background: #161b22;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.code-label { font-size: 11px; color: #8b949e; }
+.copy-btn {
+  font-size: 11px;
+  color: #8b949e;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 5px;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all .15s;
+}
+.copy-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.code-body {
+  padding: 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.8;
+  overflow-x: auto;
+}
+.ck { color: #79c0ff; }
+.cv { color: #a5f3a5; }
+.cs { color: #f0c080; }
+.cn { color: #f8c8a0; }
+.cc { color: #8b949e; font-style: italic; }
+
+.latency-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--purple-dim);
+  border: 1px solid rgba(139,92,246,0.2);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: #C4B5FD;
+}
+.latency-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--purple);
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(.8); }
+}
+
+/* Score Tips PAGE */
+.tips-layout {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+.tips-header {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.score-mini { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.score-mini-num {
+  font-family: 'Fraunces', serif;
+  font-size: 44px;
+  font-weight: 300;
+  background: linear-gradient(135deg, #93C5FD, #3B82F6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.score-mini-info {}
+.score-mini-cat { display: inline-block; background: var(--green-dim); color: var(--green); font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 999px; margin-bottom: 3px; }
+.score-mini-sub { font-size: 12px; color: var(--text2); }
+
+.target-strip {
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 6px;
+}
+.target-label { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.target-text { font-size: 12px; color: var(--text2); }
+.target-pts { font-size: 12px; font-weight: 600; color: var(--blue2); }
+.target-track { height: 5px; background: var(--bg); border-radius: 999px; overflow: hidden; }
+.target-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blue), #93C5FD); width: 0%; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+
+.tip-items { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.tip-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.tip-item:hover { border-color: var(--border2); }
+.tip-item.completed { opacity: .45; }
+.tip-top { display: flex; align-items: center; gap: 12px; }
+.tip-emoji { font-size: 22px; flex-shrink: 0; }
+.tip-info { flex: 1; }
+.tip-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 1px; }
+.tip-desc { font-size: 11px; color: var(--text3); }
+.tip-pts {
+  font-size: 11px; font-weight: 700;
+  padding: 3px 9px; border-radius: 999px;
+  flex-shrink: 0;
+}
+.pts-high { background: var(--green-dim); color: var(--green); border: 1px solid rgba(16,185,129,0.2); }
+.pts-med { background: var(--blue-dim); color: var(--blue2); border: 1px solid rgba(59,130,246,0.2); }
+.pts-low { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
+
+.tip-expand {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  display: none;
+}
+.tip-expand.open { display: block; }
+.do-btn {
+  margin-top: 10px;
+  font-size: 12px;
+  padding: 6px 14px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all .15s;
+}
+.do-btn:hover { background: #2563EB; }
+
+.myth-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.myth-header { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 500; color: var(--text); }
+.myth-item { padding: 12px 16px; border-bottom: 1px solid var(--border); cursor: pointer; }
+.myth-item:last-child { border-bottom: none; }
+.myth-q { font-size: 12px; color: var(--text2); margin-bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.myth-q-text { flex: 1; }
+.myth-arrow { font-size: 12px; color: var(--text3); transition: transform .2s; }
+.myth-a { font-size: 12px; color: var(--text3); line-height: 1.6; margin-top: 8px; display: none; }
+.myth-a.open { display: block; }
+.myth-item.open .myth-arrow { transform: rotate(180deg); }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .nav-tabs { display: none; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .bank-grid { grid-template-columns: 1fr; }
+  .table-head, .table-row { grid-template-columns: 1fr 70px 80px; }
+  .th:nth-child(3), .th:nth-child(4), .table-row > *:nth-child(3), .table-row > *:nth-child(4) { display: none; }
+}
+
+/* Mobile bottom nav */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(10,15,30,0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  padding: 8px 0 16px;
+  z-index: 100;
+  grid-template-columns: repeat(4, 1fr);
+}
+@media (max-width: 600px) {
+  .bottom-nav { display: grid; }
+  .page { padding-bottom: 80px; }
+}
+.bnav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  cursor: pointer;
+  transition: all .15s;
+  background: none; border: none;
+  font-family: 'DM Sans', sans-serif;
+}
+.bnav-icon { font-size: 20px; }
+.bnav-label { font-size: 10px; color: var(--text3); }
+.bnav-item.active .bnav-label { color: var(--blue2); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="logo">
+    <div class="logo-mark">🌉</div>
+    <span class="logo-text">CreditBridge</span>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('borrower',this)">Skor Saya</button>
+    <button class="nav-tab" onclick="showPage('onboard',this)">Onboarding</button>
+    <button class="nav-tab" onclick="showPage('tips',this)">Tips Skor</button>
+    <button class="nav-tab" onclick="showPage('bank',this)">Dashboard Bank</button>
+    <button class="nav-tab" onclick="showPage('api',this)">API</button>
+  </div>
+  <div class="nav-right">
+    <div class="nav-avatar">BS</div>
+  </div>
+</nav>
+
+<!-- BORROWER PAGE -->
+<div id="page-borrower" class="page active">
+  <div class="borrower-layout">
+    <div class="score-hero">
+      <div class="score-hero-top">
+        <span class="score-hero-label">Credit Score</span>
+        <span class="score-refresh">Diperbarui hari ini</span>
+      </div>
+      <div class="score-main">
+        <div class="score-number" id="scoreNum">0</div>
+        <div class="score-side">
+          <div class="score-category">BAIK</div>
+          <div class="score-limit">Limit hingga <strong>Rp 15 juta</strong></div>
+        </div>
+      </div>
+      <div class="score-bar-container">
+        <div class="score-bar-track">
+          <div class="score-bar-fill" id="scoreBarFill" style="width:0%"></div>
+        </div>
+        <div class="score-bar-labels">
+          <span>300</span><span>500</span><span>650</span><span>750</span><span>850</span>
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="milestone-strip">
+          <span class="milestone-text">+8 poin lagi → kategori Sangat Baik</span>
+          <span class="milestone-points">750</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">Data Terhubung</span>
+      <button class="section-action" onclick="showPage('onboard', document.querySelectorAll('.nav-tab')[1])">+ Tambah</button>
+    </div>
+    <div class="sources-list">
+      <div class="source-item">
+        <div class="source-icon" style="background:rgba(253,224,71,0.1);">⚡</div>
+        <div class="source-info">
+          <div class="source-name">PLN</div>
+          <div class="source-detail">24 bln histori · 0 telat</div>
+        </div>
+        <span class="source-badge badge-connected">Terhubung</span>
+      </div>
+      <div class="source-item">
+        <div class="source-icon" style="background:rgba(249,115,22,0.1);">🛒</div>
+        <div class="source-info">
+          <div class="source-name">Tokopedia</div>
+          <div class="source-detail">Rp 3,2 jt/bln · Rating 4.8</div>
+        </div>
+        <span class="source-badge badge-connected">Terhubung</span>
+      </div>
+      <div class="source-item">
+        <div class="source-icon" style="background:rgba(34,197,94,0.1);">💳</div>
+        <div class="source-info">
+          <div class="source-name">GoPay / OVO</div>
+          <div class="source-detail">Saldo rata Rp 420rb</div>
+        </div>
+        <span class="source-badge badge-connected">Terhubung</span>
+      </div>
+      <div class="source-item">
+        <div class="source-icon" style="background:rgba(239,68,68,0.1);">📱</div>
+        <div class="source-info">
+          <div class="source-name">Telkomsel</div>
+          <div class="source-detail">18 bulan aktif</div>
+        </div>
+        <span class="source-badge badge-connected">Terhubung</span>
+      </div>
+      <div class="source-item" onclick="showPage('onboard', document.querySelectorAll('.nav-tab')[1])" style="opacity:.7;">
+        <div class="source-icon" style="background:rgba(245,158,11,0.1);">🏥</div>
+        <div class="source-info">
+          <div class="source-name">BPJS Ketenagakerjaan</div>
+          <div class="source-detail">Belum terhubung</div>
+        </div>
+        <span class="source-badge badge-points">+18 poin</span>
+      </div>
+    </div>
+
+    <div class="section-header"><span class="section-title">4 Pilar Skor</span></div>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-top">
+          <span class="pillar-name">Konsistensi Bayar</span>
+          <span class="pillar-score" style="color:#10B981;" id="p1">0</span>
+        </div>
+        <div class="pillar-bar-track"><div class="pillar-bar-fill" id="pb1" style="background:#10B981;"></div></div>
+        <div class="pillar-hint">Kuat — pertahankan</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-top">
+          <span class="pillar-name">Stabilitas Penghasilan</span>
+          <span class="pillar-score" style="color:#3B82F6;" id="p2">0</span>
+        </div>
+        <div class="pillar-bar-track"><div class="pillar-bar-fill" id="pb2" style="background:#3B82F6;"></div></div>
+        <div class="pillar-hint">Ada peluang naik</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-top">
+          <span class="pillar-name">Aktivitas Digital</span>
+          <span class="pillar-score" style="color:#3B82F6;" id="p3">0</span>
+        </div>
+        <div class="pillar-bar-track"><div class="pillar-bar-fill" id="pb3" style="background:#3B82F6;"></div></div>
+        <div class="pillar-hint">Cukup baik</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-top">
+          <span class="pillar-name">Kelengkapan Data</span>
+          <span class="pillar-score" style="color:#F59E0B;" id="p4">0</span>
+        </div>
+        <div class="pillar-bar-track"><div class="pillar-bar-fill" id="pb4" style="background:#F59E0B;"></div></div>
+        <div class="pillar-hint">Tambah sumber data!</div>
+      </div>
+    </div>
+
+    <button class="cta-primary" onclick="showPage('bank', document.querySelectorAll('.nav-tab')[3])">Ajukan Pinjaman →</button>
+    <button class="cta-secondary" onclick="showPage('tips', document.querySelectorAll('.nav-tab')[2])">Cara meningkatkan skor</button>
+  </div>
+</div>
+
+<!-- ONBOARDING PAGE -->
+<div id="page-onboard" class="page">
+  <div class="onboard-layout">
+    <div class="step-bar">
+      <div class="step-dot step-done">✓</div>
+      <div class="step-line step-line-done"></div>
+      <div class="step-dot step-active">2</div>
+      <div class="step-line step-line-todo"></div>
+      <div class="step-dot step-todo">3</div>
+    </div>
+
+    <h1 class="onboard-title">Hubungkan data kamu</h1>
+    <p class="onboard-sub">Pilih sumber data yang mau kamu hubungkan. Semakin lengkap, semakin akurat skor kamu — dan semakin besar limit pinjaman.</p>
+
+    <div class="connect-grid" id="connectGrid">
+      <div class="connect-item selected" onclick="toggleConnect(this)">
+        <div class="connect-emoji">⚡</div>
+        <div class="connect-name">PLN</div>
+      </div>
+      <div class="connect-item selected" onclick="toggleConnect(this)">
+        <div class="connect-emoji">🛒</div>
+        <div class="connect-name">Tokopedia</div>
+      </div>
+      <div class="connect-item selected" onclick="toggleConnect(this)">
+        <div class="connect-emoji">💳</div>
+        <div class="connect-name">GoPay / OVO</div>
+      </div>
+      <div class="connect-item selected" onclick="toggleConnect(this)">
+        <div class="connect-emoji">📱</div>
+        <div class="connect-name">Telkomsel</div>
+      </div>
+      <div class="connect-item" onclick="toggleConnect(this)">
+        <div class="connect-emoji">🏥</div>
+        <div class="connect-name">BPJS</div>
+      </div>
+      <div class="connect-item" onclick="toggleConnect(this)">
+        <div class="connect-emoji">🏪</div>
+        <div class="connect-name">Shopee</div>
+      </div>
+      <div class="connect-item" onclick="toggleConnect(this)">
+        <div class="connect-emoji">🚰</div>
+        <div class="connect-name">PDAM</div>
+      </div>
+      <div class="connect-item" onclick="toggleConnect(this)">
+        <div class="connect-emoji">🎯</div>
+        <div class="connect-name">DANA</div>
+      </div>
+    </div>
+
+    <div class="privacy-box">
+      <span class="privacy-icon">🔒</span>
+      <div class="privacy-text"><strong>Privasi terlindungi sepenuhnya.</strong> Data hanya dibaca untuk menghitung skor — tidak disimpan permanen. Enkripsi penuh sesuai UU PDP 2022. Kamu bisa cabut akses kapan saja.</div>
+    </div>
+
+    <button class="cta-primary" onclick="showPage('borrower', document.querySelectorAll('.nav-tab')[0])">Proses Skor Saya →</button>
+  </div>
+</div>
+
+<!-- TIPS PAGE -->
+<div id="page-tips" class="page">
+  <div class="tips-layout">
+    <div class="tips-header">
+      <div class="score-mini">
+        <div class="score-mini-num">742</div>
+        <div class="score-mini-info">
+          <div class="score-mini-cat">BAIK</div>
+          <div class="score-mini-sub">Budi Santoso</div>
+        </div>
+      </div>
+      <div class="target-strip">
+        <div class="target-label">
+          <span class="target-text">Menuju Sangat Baik (750+)</span>
+          <span class="target-pts">+8 poin lagi</span>
+        </div>
+        <div class="target-track">
+          <div class="target-fill" id="targetFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header"><span class="section-title">Aksi yang bisa dilakukan sekarang</span></div>
+    <div class="tip-items">
+      <div class="tip-item" onclick="toggleTip(this)">
+        <div class="tip-top">
+          <span class="tip-emoji">🏥</span>
+          <div class="tip-info">
+            <div class="tip-name">Hubungkan BPJS Ketenagakerjaan</div>
+            <div class="tip-desc">Belum terhubung · 2 menit</div>
+          </div>
+          <span class="tip-pts pts-high">+18 poin</span>
+        </div>
+        <div class="tip-expand">
+          BPJS Ketenagakerjaan adalah bukti penghasilan yang kuat. Iuran rutin = penghasilan nyata dan konsisten.<br><br>
+          <strong>Cara hubungkan:</strong> Buka menu Sumber Data → BPJS → login dengan NIK. OTP dikirim ke nomor terdaftar di BPJS.
+          <br><button class="do-btn" onclick="event.stopPropagation(); completeTip(this)">Hubungkan sekarang</button>
+        </div>
+      </div>
+      <div class="tip-item" onclick="toggleTip(this)">
+        <div class="tip-top">
+          <span class="tip-emoji">📅</span>
+          <div class="tip-info">
+            <div class="tip-name">Bayar tagihan sebelum tanggal 10</div>
+            <div class="tip-desc">Konsistensi tanggal bayar dihitung</div>
+          </div>
+          <span class="tip-pts pts-med">+7 poin</span>
+        </div>
+        <div class="tip-expand">
+          Sistem tidak hanya melihat apakah kamu bayar, tapi <em>kapan</em>. Bayar di tanggal konsisten selama 12+ bulan adalah sinyal kedisiplinan finansial yang kuat.<br><br>
+          <strong>Tips:</strong> Aktifkan autodebit PLN via GoPay atau bank untuk konsistensi otomatis.
+          <br><button class="do-btn" onclick="event.stopPropagation(); completeTip(this)">Tandai selesai</button>
+        </div>
+      </div>
+      <div class="tip-item" onclick="toggleTip(this)">
+        <div class="tip-top">
+          <span class="tip-emoji">💰</span>
+          <div class="tip-info">
+            <div class="tip-name">Jaga saldo e-wallet di atas Rp 100rb</div>
+            <div class="tip-desc">Saldo rata kamu: Rp 42rb saat ini</div>
+          </div>
+          <span class="tip-pts pts-med">+6 poin</span>
+        </div>
+        <div class="tip-expand">
+          Saldo e-wallet yang selalu mendekati nol menunjukkan cash flow ketat. Tidak perlu besar — konsisten di atas Rp 100rb sudah cukup sebagai sinyal positif.<br><br>
+          <strong>Tips:</strong> Top-up rutin Rp 50rb setiap minggu, pasang pengingat di kalender.
+          <br><button class="do-btn" onclick="event.stopPropagation(); completeTip(this)">Tandai selesai</button>
+        </div>
+      </div>
+      <div class="tip-item" onclick="toggleTip(this)">
+        <div class="tip-top">
+          <span class="tip-emoji">🏪</span>
+          <div class="tip-info">
+            <div class="tip-name">Buka toko di marketplace</div>
+            <div class="tip-desc">Histori penjualan = bukti penghasilan</div>
+          </div>
+          <span class="tip-pts pts-med">+12 poin</span>
+        </div>
+        <div class="tip-expand">
+          Bahkan toko kecil dengan 5–10 transaksi/bulan sudah menghasilkan data yang berguna. Rating pembeli ikut dihitung.<br><br>
+          <strong>Mulai dari:</strong> Jual barang bekas, makanan rumahan, atau jasa via Tokopedia/Shopee.
+          <br><button class="do-btn" onclick="event.stopPropagation(); completeTip(this)">Tandai selesai</button>
+        </div>
+      </div>
+      <div class="tip-item" onclick="toggleTip(this)">
+        <div class="tip-top">
+          <span class="tip-emoji">📱</span>
+          <div class="tip-info">
+            <div class="tip-name">Hindari ganti nomor HP terlalu sering</div>
+            <div class="tip-desc">Umur nomor telco = sinyal stabilitas</div>
+          </div>
+          <span class="tip-pts pts-low">+4 poin</span>
+        </div>
+        <div class="tip-expand">
+          Nomor HP aktif bertahun-tahun menunjukkan kamu tidak berpindah-pindah. Kalau punya 2 nomor, pastikan nomor utama yang terhubung ke semua layanan tetap konsisten.
+          <br><button class="do-btn" onclick="event.stopPropagation(); completeTip(this)">Tandai selesai</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="myth-section">
+      <div class="myth-header">❓ Mitos yang sering salah dipahami</div>
+      <div class="myth-item" onclick="toggleMyth(this)">
+        <div class="myth-q">
+          <span class="myth-q-text">"Tidak pernah pinjam = skor bagus?"</span>
+          <span class="myth-arrow">▾</span>
+        </div>
+        <div class="myth-a">Justru sebaliknya. Tidak ada data kredit membuat skor tidak bisa dihitung. CB butuh sinyal perilaku finansial, bukan hanya ketiadaan masalah.</div>
+      </div>
+      <div class="myth-item" onclick="toggleMyth(this)">
+        <div class="myth-q">
+          <span class="myth-q-text">"Skor langsung naik setelah hubungkan data baru?"</span>
+          <span class="myth-arrow">▾</span>
+        </div>
+        <div class="myth-a">Tidak instan. Sistem butuh 30–90 hari histori dari sumber baru sebelum bisa menghitung kontribusinya. Hubungkan sekarang, hasilnya terasa bulan depan.</div>
+      </div>
+      <div class="myth-item" onclick="toggleMyth(this)">
+        <div class="myth-q">
+          <span class="myth-q-text">"Semakin banyak pinjaman dilunasi = skor makin tinggi?"</span>
+          <span class="myth-arrow">▾</span>
+        </div>
+        <div class="myth-a">Tidak selalu. Terlalu banyak pinjaman sekaligus dibaca sebagai tekanan cash flow. Yang dihargai adalah konsistensi membayar, bukan volume pinjaman.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BANK DASHBOARD PAGE -->
+<div id="page-bank" class="page">
+  <div class="bank-layout">
+    <div class="bank-header">
+      <div>
+        <div class="bank-title">Dashboard Mitra</div>
+        <div class="bank-sub">BPR Sejahtera Mandiri · Mei 2026</div>
+      </div>
+      <div class="bank-actions">
+        <select class="btn-sm btn-outline" style="cursor:pointer;">
+          <option>30 hari terakhir</option>
+          <option>90 hari terakhir</option>
+        </select>
+        <button class="btn-sm btn-filled">Export CSV</button>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Query bulan ini</div>
+        <div class="kpi-value" id="kpi1">0</div>
+        <div class="kpi-delta delta-up">↑ +23% vs bulan lalu</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Rata-rata skor</div>
+        <div class="kpi-value" id="kpi2">0</div>
+        <div class="kpi-delta delta-up">↑ +12 poin</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Approval rate</div>
+        <div class="kpi-value" id="kpi3">0%</div>
+        <div class="kpi-delta delta-up">↑ +8% dari sebelum CB</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Biaya per query</div>
+        <div class="kpi-value">Rp 8rb</div>
+        <div class="kpi-delta delta-flat">flat rate</div>
+      </div>
+    </div>
+
+    <div class="bank-grid">
+      <div class="table-card">
+        <div class="table-head">
+          <div class="th">Pemohon</div>
+          <div class="th">Skor CB</div>
+          <div class="th">Sumber</div>
+          <div class="th">Rekomendasi</div>
+          <div class="th">Status</div>
+        </div>
+        <div class="table-row">
+          <div><div class="td-name">Budi Santoso</div><div class="td-job">Driver Gojek · Bekasi</div></div>
+          <div class="td-score" style="color:#60A5FA;">742</div>
+          <div class="td-sources">5 sumber</div>
+          <div><span class="pill pill-approve">Setujui</span></div>
+          <div><span class="pill pill-processing">Diproses</span></div>
+        </div>
+        <div class="table-row">
+          <div><div class="td-name">Sari Dewi</div><div class="td-job">Penjual Shopee · Depok</div></div>
+          <div class="td-score" style="color:#60A5FA;">811</div>
+          <div class="td-sources">6 sumber</div>
+          <div><span class="pill pill-approve">Setujui</span></div>
+          <div><span class="pill pill-approve">Disetujui</span></div>
+        </div>
+        <div class="table-row">
+          <div><div class="td-name">Roni Hidayat</div><div class="td-job">Pedagang warung · Bogor</div></div>
+          <div class="td-score" style="color:#F59E0B;">541</div>
+          <div class="td-sources">3 sumber</div>
+          <div><span class="pill pill-review">Tinjau</span></div>
+          <div><span class="pill pill-review">Menunggu</span></div>
+        </div>
+        <div class="table-row">
+          <div><div class="td-name">Lia Kurniawati</div><div class="td-job">Petani · Subang</div></div>
+          <div class="td-score" style="color:#60A5FA;">673</div>
+          <div class="td-sources">4 sumber</div>
+          <div><span class="pill pill-approve">Setujui</span></div>
+          <div><span class="pill pill-approve">Disetujui</span></div>
+        </div>
+        <div class="table-row">
+          <div><div class="td-name">Agus Prasetyo</div><div class="td-job">Tidak ada riwayat bank</div></div>
+          <div class="td-score" style="color:#EF4444;">389</div>
+          <div class="td-sources">2 sumber</div>
+          <div><span class="pill pill-reject">Tolak</span></div>
+          <div><span class="pill pill-reject">Ditolak</span></div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="dist-card">
+          <div class="dist-title">Distribusi Skor — bulan ini</div>
+          <div class="dist-row">
+            <div class="dist-meta"><span class="dist-label">Sangat baik (750–850)</span><span class="dist-val">31%</span></div>
+            <div class="dist-track"><div class="dist-fill" id="d1" style="background:#3B82F6;"></div></div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-meta"><span class="dist-label">Baik (650–749)</span><span class="dist-val">36%</span></div>
+            <div class="dist-track"><div class="dist-fill" id="d2" style="background:#60A5FA;"></div></div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-meta"><span class="dist-label">Cukup (500–649)</span><span class="dist-val">22%</span></div>
+            <div class="dist-track"><div class="dist-fill" id="d3" style="background:#F59E0B;"></div></div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-meta"><span class="dist-label">Rendah (&lt;500)</span><span class="dist-val">11%</span></div>
+            <div class="dist-track"><div class="dist-fill" id="d4" style="background:#EF4444;"></div></div>
+          </div>
+        </div>
+
+        <div class="dist-card">
+          <div class="dist-title">Top sumber data dipakai</div>
+          <div class="dist-row">
+            <div class="dist-meta"><span class="dist-label">PLN</span><span class="dist-val">94%</span></div>
+            <div class="dist-track"><div class="dist-fill" id="s1" style="background:#10B981;"></div></div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-meta"><span class="dist-label">E-wallet</span><span class="dist-val">82%</span></div>
+            <div class="dist-track"><div class="dist-fill" id="s2" style="background:#10B981;"></div></div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-meta"><span class="dist-label">Marketplace</span><span class="dist-val">71%</span></div>
+            <div class="dist-track"><div class="dist-fill" id="s3" style="background:#10B981;"></div></div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-meta"><span class="dist-label">Telco</span><span class="dist-val">68%</span></div>
+            <div class="dist-track"><div class="dist-fill" id="s4" style="background:#10B981;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- API PAGE -->
+<div id="page-api" class="page">
+  <div class="api-layout">
+    <div class="api-header">
+      <div class="api-title">CreditBridge API</div>
+      <div class="api-sub">Integrasi credit scoring alternatif ke sistem kamu dalam satu API call. Response dalam &lt;500ms.</div>
+    </div>
+
+    <div class="endpoint-bar">
+      <span class="method-badge">POST</span>
+      <span class="endpoint-url">https://api.creditbridge.id/v1/score</span>
+    </div>
+
+    <div class="latency-strip">
+      <div class="latency-dot"></div>
+      <span>API aktif · Latency rata-rata <strong>340ms</strong> · Uptime 99.97%</span>
+    </div>
+
+    <div class="code-card">
+      <div class="code-toolbar">
+        <span class="code-label">Response — 200 OK</span>
+        <button class="copy-btn" onclick="copyCode()">Salin</button>
+      </div>
+      <div class="code-body" id="codeBody">
+<span class="cc">// Response JSON</span><br>
+{<br>
+&nbsp;&nbsp;<span class="ck">"request_id"</span>: <span class="cs">"cb_req_9f3a21d"</span>,<br>
+&nbsp;&nbsp;<span class="ck">"nik_hash"</span>: <span class="cs">"sha256:a9f3b..."</span>,<br>
+&nbsp;&nbsp;<span class="ck">"score"</span>: <span class="cn">742</span>,<br>
+&nbsp;&nbsp;<span class="ck">"category"</span>: <span class="cs">"BAIK"</span>,<br>
+&nbsp;&nbsp;<span class="ck">"recommendation"</span>: <span class="cs">"APPROVE"</span>,<br>
+&nbsp;&nbsp;<span class="ck">"max_loan_idr"</span>: <span class="cn">15000000</span>,<br>
+&nbsp;&nbsp;<span class="ck">"data_sources"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"pln"</span>: <span class="cs">"24 bulan, 0 telat"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"ecommerce"</span>: <span class="cs">"Rp3.2jt/bln, rating 4.8"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"ewallet"</span>: <span class="cs">"aktif, saldo rata Rp420rb"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"telco"</span>: <span class="cs">"18 bulan aktif"</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span class="ck">"score_breakdown"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"payment_consistency"</span>: <span class="cn">88</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"income_stability"</span>: <span class="cn">74</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"digital_activity"</span>: <span class="cn">81</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"data_coverage"</span>: <span class="cn">70</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span class="ck">"explainability"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Konsistensi bayar PLN 24 bln: +42 poin"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"Omzet marketplace stabil: +31 poin"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"BPJS belum terhubung: -18 poin"</span><br>
+&nbsp;&nbsp;],<br>
+&nbsp;&nbsp;<span class="ck">"consent_verified"</span>: <span class="cn">true</span>,<br>
+&nbsp;&nbsp;<span class="ck">"latency_ms"</span>: <span class="cn">340</span><br>
+}
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="dist-card">
+        <div class="dist-title" style="margin-bottom:8px;">Harga per query</div>
+        <div style="font-family:'Fraunces',serif;font-size:32px;color:#60A5FA;font-weight:300;margin-bottom:4px;">Rp 8rb</div>
+        <div style="font-size:12px;color:var(--text3);">Volume discount tersedia di atas 10.000 query/bulan</div>
+      </div>
+      <div class="dist-card">
+        <div class="dist-title" style="margin-bottom:8px;">Tersedia untuk</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
+          <span style="font-size:12px;color:var(--text2);">✓ Bank & BPR</span>
+          <span style="font-size:12px;color:var(--text2);">✓ P2P Lending</span>
+          <span style="font-size:12px;color:var(--text2);">✓ Koperasi digital</span>
+          <span style="font-size:12px;color:var(--text2);">✓ BNPL platforms</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Nav Mobile -->
+<div class="bottom-nav">
+  <button class="bnav-item active" onclick="showPage('borrower',document.querySelectorAll('.nav-tab')[0]);updateBnav(this)">
+    <span class="bnav-icon">📊</span>
+    <span class="bnav-label">Skor Saya</span>
+  </button>
+  <button class="bnav-item" onclick="showPage('onboard',document.querySelectorAll('.nav-tab')[1]);updateBnav(this)">
+    <span class="bnav-icon">🔗</span>
+    <span class="bnav-label">Hubungkan</span>
+  </button>
+  <button class="bnav-item" onclick="showPage('tips',document.querySelectorAll('.nav-tab')[2]);updateBnav(this)">
+    <span class="bnav-icon">💡</span>
+    <span class="bnav-label">Tips</span>
+  </button>
+  <button class="bnav-item" onclick="showPage('bank',document.querySelectorAll('.nav-tab')[3]);updateBnav(this)">
+    <span class="bnav-icon">🏦</span>
+    <span class="bnav-label">Bank</span>
+  </button>
+</div>
+
+<script>
+// Page switching
+function showPage(id, tabEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (tabEl) tabEl.classList.add('active');
+  if (id === 'borrower') animateBorrower();
+  if (id === 'bank') animateBank();
+  if (id === 'tips') animateTips();
+}
+
+function updateBnav(btn) {
+  document.querySelectorAll('.bnav-item').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// Animate score counter
+function animateCounter(el, target, duration, prefix, suffix) {
+  prefix = prefix || '';
+  suffix = suffix || '';
+  let start = 0;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) { start = target; clearInterval(timer); }
+    el.textContent = prefix + Math.floor(start).toLocaleString('id') + suffix;
+  }, 16);
+}
+
+function animateBorrower() {
+  // Score number
+  const scoreEl = document.getElementById('scoreNum');
+  animateCounter(scoreEl, 742, 1200);
+  // Score bar
+  setTimeout(() => {
+    document.getElementById('scoreBarFill').style.width = '70%';
+  }, 100);
+  // Pillars
+  const pillars = [{id:'p1',bar:'pb1',val:88,color:'#10B981'},{id:'p2',bar:'pb2',val:74,color:'#3B82F6'},{id:'p3',bar:'pb3',val:81,color:'#3B82F6'},{id:'p4',bar:'pb4',val:70,color:'#F59E0B'}];
+  pillars.forEach((p, i) => {
+    setTimeout(() => {
+      animateCounter(document.getElementById(p.id), p.val, 800);
+      document.getElementById(p.bar).style.width = p.val + '%';
+    }, 200 + i * 100);
+  });
+}
+
+function animateBank() {
+  animateCounter(document.getElementById('kpi1'), 1284, 1000);
+  animateCounter(document.getElementById('kpi2'), 698, 1000);
+  setTimeout(() => { document.getElementById('kpi3').textContent = '67%'; }, 800);
+  setTimeout(() => {
+    document.getElementById('d1').style.width = '31%';
+    document.getElementById('d2').style.width = '36%';
+    document.getElementById('d3').style.width = '22%';
+    document.getElementById('d4').style.width = '11%';
+    document.getElementById('s1').style.width = '94%';
+    document.getElementById('s2').style.width = '82%';
+    document.getElementById('s3').style.width = '71%';
+    document.getElementById('s4').style.width = '68%';
+  }, 200);
+}
+
+function animateTips() {
+  setTimeout(() => {
+    document.getElementById('targetFill').style.width = '86%';
+  }, 200);
+}
+
+// Connect toggle
+function toggleConnect(el) {
+  el.classList.toggle('selected');
+}
+
+// Tip toggle
+function toggleTip(el) {
+  const expand = el.querySelector('.tip-expand');
+  const isOpen = expand.classList.contains('open');
+  document.querySelectorAll('.tip-expand').forEach(e => e.classList.remove('open'));
+  if (!isOpen) expand.classList.add('open');
+}
+
+function completeTip(btn) {
+  const card = btn.closest('.tip-item');
+  card.classList.add('completed');
+  btn.textContent = '✓ Selesai';
+  btn.style.background = '#10B981';
+  btn.disabled = true;
+}
+
+// Myth toggle
+function toggleMyth(el) {
+  const ans = el.querySelector('.myth-a');
+  const isOpen = ans.classList.contains('open');
+  document.querySelectorAll('.myth-a').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.myth-item').forEach(m => m.classList.remove('open'));
+  if (!isOpen) { ans.classList.add('open'); el.classList.add('open'); }
+}
+
+// Copy code
+function copyCode() {
+  const text = `{
+  "request_id": "cb_req_9f3a21d",
+  "nik_hash": "sha256:a9f3b...",
+  "score": 742,
+  "category": "BAIK",
+  "recommendation": "APPROVE",
+  "max_loan_idr": 15000000,
+  "data_sources": {
+    "pln": "24 bulan, 0 telat",
+    "ecommerce": "Rp3.2jt/bln, rating 4.8",
+    "ewallet": "aktif, saldo rata Rp420rb",
+    "telco": "18 bulan aktif"
+  },
+  "explainability": [
+    "Konsistensi bayar PLN 24 bln: +42 poin",
+    "Omzet marketplace stabil: +31 poin",
+    "BPJS belum terhubung: -18 poin"
+  ],
+  "consent_verified": true,
+  "latency_ms": 340
+}`;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Tersalin ✓';
+    setTimeout(() => btn.textContent = 'Salin', 2000);
+  });
+}
+
+// Init
+animateBorrower();
+</script>
+</body>
+</html>
